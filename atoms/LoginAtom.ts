@@ -7,6 +7,6 @@ export const loginState = atom({
 });
 
 export const loginState1 = atom({
-  key: "textState", // unique ID (with respect to other atoms/selectors)
+  key: "textState1", // unique ID (with respect to other atoms/selectors)
   default: "", // default value (aka initial value)
 });
