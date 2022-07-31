@@ -1,17 +1,35 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
-import { useState } from "react";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { loginState } from "../../../atoms/LoginAtom";
+import { loginModalState } from "../../../atoms/LoginAtom";
 import LoginModal from "../../molecules/Modal/LoginModal";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useRecoilState(loginState);
+  const [isOpen, setIsOpen] = useRecoilState(loginModalState);
   const [isLogin, setIsLogin] = useState(false);
   const handleOpen = () => {
     setIsOpen(true);
   };
+
+  const handleIsLogin = () => {
+    const token = Cookies.get("token");
+    if (token) {
+      setIsLogin(true);
+    }
+  };
+
+  useEffect(() => {
+    handleIsLogin();
+  });
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    setIsLogin(false);
+  };
+
   return (
     <>
       <nav className="py-4 px-10 flex items-center justify-between border-b border-slate-600">
@@ -27,7 +45,7 @@ export default function Navbar() {
                 <button
                   type="submit"
                   className="button"
-                  onClick={handleOpen}
+                  onClick={handleLogout}
                 >
                   Logout
                 </button>

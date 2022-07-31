@@ -4,16 +4,25 @@ import Cookies from "js-cookie";
 import Modal from "@mui/material/Modal";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
-import { loginState } from "../../../atoms/LoginAtom";
+import { isLoginState, loginModalState, notesState } from "../../../atoms/LoginAtom";
 import { Login } from "../../../services/Auth";
+import { getNotes } from "../../../services/Notes";
 
 export default function LoginModal() {
-  const [open, setOpen] = useRecoilState(loginState);
+  const [open, setOpen] = useRecoilState(loginModalState);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+  const [notes, setNotes] = useRecoilState(notesState);
   const handleClose = () => setOpen(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
+
+  const handleGetNotes = async () => {
+    const res = await getNotes();
+    console.log(res);
+    setNotes(res.data);
+  };
 
   const handelSubmitLogin = async () => {
     const res = await Login(email, password);
@@ -27,7 +36,14 @@ export default function LoginModal() {
           sameSite: "strict",
         },
       );
+
+      setTimeout(() => {
+        console.log("get Notes");
+        handleGetNotes();
+      }, 1000);
+
       setOpen(false);
+      setIsLogin(true);
     } else {
       setMsg("Login Failed");
     }
