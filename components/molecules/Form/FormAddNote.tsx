@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   isUpdateState, notesState, noteState,
 } from "../../../atoms/LoginAtom";
-import { getNotes, saveNote } from "../../../services/Notes";
+import { getNotes, saveNote, updateNote } from "../../../services/Notes";
 
 export default function FormAddNote() {
   const [isUpdate, setIsUpdate] = useRecoilState(isUpdateState);
@@ -21,11 +21,18 @@ export default function FormAddNote() {
     event.preventDefault();
     if (note.title.length > 0 && note.body.length > 0) {
 
-      const res = await saveNote(note.title, note.body, note.desc);
-      console.log(res);
+      if (isUpdate) {
+        const res = await updateNote(parseInt(note.id), note.title, note.body, note.desc);
+        console.log(res);
+      } else {
+        const res = await saveNote(note.title, note.body, note.desc);
+        console.log(res);
+      }
+
       setNote({ ...note, title: "", body: "", desc: "" });
       console.log("Note After Save", note);
       handleGetNotes();
+      setIsUpdate(false);
     } else {
       alert("Please fill all the fields");
     }

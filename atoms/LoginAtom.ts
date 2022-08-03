@@ -19,6 +19,7 @@ export const notesState = atom({
 export const noteState = atom({
   key: "keyNoteState", // unique ID (with respect to other atoms/selectors)
   default: {
+    id: "",
     title: "",
     body: "",
     desc: "",

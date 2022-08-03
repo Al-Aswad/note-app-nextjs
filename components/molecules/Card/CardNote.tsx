@@ -6,7 +6,7 @@ export default function CardNotes({ note }: any) {
 
   const [noteS, setNoteS] = useRecoilState(noteState);
 
-  const {
+  const { id,
     title, body, description: desc, created_at,
   } = note;
 
@@ -22,7 +22,7 @@ export default function CardNotes({ note }: any) {
   const handleEdit = () => {
     console.log("Note ", note);
     setIsUpdate(true);
-    setNoteS({ ...note, title: title, body: body, desc: desc });
+    setNoteS({ ...note, id: id, title: title, body: body, desc: desc });
   };
 
   return (
