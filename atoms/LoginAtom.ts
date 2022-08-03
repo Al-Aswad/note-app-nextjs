@@ -2,21 +2,35 @@
 import { atom } from "recoil";
 
 export const loginModalState = atom({
-  key: "loginModalState", // unique ID (with respect to other atoms/selectors)
+  key: "keyModalState", // unique ID (with respect to other atoms/selectors)
   default: false, // default value (aka initial value)
 });
 
 export const isLoginState = atom({
-  key: "isLoginState", // unique ID (with respect to other atoms/selectors)
+  key: "keyIsLoginState", // unique ID (with respect to other atoms/selectors)
   default: false, // default value (aka initial value)
 });
 
 export const notesState = atom({
-  key: "notesState", // unique ID (with respect to other atoms/selectors)
+  key: "keyNotesState", // unique ID (with respect to other atoms/selectors)
   default: [], // default value (aka initial value)
 });
 
 export const noteState = atom({
-  key: "noteState", // unique ID (with respect to other atoms/selectors)
-  default: [], // default value (aka initial value)
+  key: "keyNoteState", // unique ID (with respect to other atoms/selectors)
+  default: {
+    title: "",
+    body: "",
+    desc: "",
+  }, // default value (aka initial value)
+});
+
+export const isUpdateState = atom({
+  key: "keyIsUpdateState", // unique ID (with respect to other atoms/selectors)
+  default: false,
+});
+
+export const noteTitleState = atom({
+  key: "keyNoteTitleState", // unique ID (with respect to other atoms/selectors)
+  default: "",
 });
