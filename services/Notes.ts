@@ -52,6 +52,20 @@ export async function updateNote(id: number, title: string, body: string, desc: 
   });
   return res.data;
 }
+
+export async function archiveNote(id: number, is_archive: boolean) {
+  const token = Cookies.get("token") ?? "token";
+  const res = await axios.put(`${BASE_URL}/v1/notes/archive/${id}`, {
+    is_archive,
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+}
+
 export async function deleteNote(id: number) {
   const token = Cookies.get("token") ?? "token";
   const res = await axios.delete(`${BASE_URL}/v1/notes/${id}`, {

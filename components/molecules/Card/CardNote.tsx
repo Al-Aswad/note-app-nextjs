@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isUpdateState, notesState, noteState } from "../../../atoms/LoginAtom";
-import { deleteNote, getNotes } from "../../../services/Notes";
+import { archiveNote, deleteNote, getNotes } from "../../../services/Notes";
 
 export default function CardNotes({ note }: any) {
   const [isUpdate, setIsUpdate] = useRecoilState(isUpdateState);
@@ -25,10 +25,16 @@ export default function CardNotes({ note }: any) {
   };
 
   const handleDelete = async (id: number) => {
-    console.log("Note ID", id);
     const res = await deleteNote(id);
 
     console.log("Delete Note ", res);
+    handleGetNotes();
+  }
+
+  const handleArchive = async (id: number) => {
+    console.log("Archive Note Status ", !note.is_archive);
+    const res = await archiveNote(id, !note.is_archive);
+    // console.log("Archive Note ", res);
     handleGetNotes();
   }
 
@@ -53,7 +59,10 @@ export default function CardNotes({ note }: any) {
         >
           Edit
         </button>
-        <button type="button" className="text-green-700 hover:bg-green-500 hover:text-white rounded-md w-full">
+        <button
+          onClick={() => handleArchive(parseInt(id))}
+          type="button"
+          className="text-green-700 hover:bg-green-500 hover:text-white rounded-md w-full">
           Done
         </button>
       </div>
