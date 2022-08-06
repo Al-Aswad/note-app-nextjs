@@ -44,7 +44,7 @@ export default function Navbar() {
         </div>
 
         <div className="w-6/12 sm:w-5/12 flex gap-4">
-          <input className="input" type="text" name="search" id="search" placeholder="Search ..." />
+          <input className="input hidden sm:flex" type="text" name="search" id="search" placeholder="Search ..." />
           {
             isLogin
               ? (
