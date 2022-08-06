@@ -6,6 +6,11 @@ export const loginModalState = atom({
   default: false, // default value (aka initial value)
 });
 
+export const daftarModalState = atom({
+  key: "keyDaftarModalState", // unique ID (with respect to other atoms/selectors)
+  default: false, // default value (aka initial value)
+});
+
 export const isLoginState = atom({
   key: "keyIsLoginState", // unique ID (with respect to other atoms/selectors)
   default: false, // default value (aka initial value)

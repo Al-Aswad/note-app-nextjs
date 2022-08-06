@@ -1,21 +1,21 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/extensions */
 import Cookies from "js-cookie";
 import Modal from "@mui/material/Modal";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
-import { isLoginState, loginModalState, notesState } from "../../../atoms/LoginAtom";
-import { Login } from "../../../services/Auth";
+import { daftarModalState, isLoginState, notesState } from "../../../atoms/LoginAtom";
+import { Daftar, Login } from "../../../services/Auth";
 import { getNotes } from "../../../services/Notes";
 
-export default function LoginModal() {
-  const [open, setOpen] = useRecoilState(loginModalState);
+export default function DaftarModal() {
+  const [open, setOpen] = useRecoilState(daftarModalState);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   const [notes, setNotes] = useRecoilState(notesState);
   const handleClose = () => setOpen(false);
 
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [msg, setMsg] = useState("");
 
   const handleGetNotes = async () => {
@@ -24,28 +24,20 @@ export default function LoginModal() {
     setNotes(res.data);
   };
 
-  const handelSubmitLogin = async () => {
-    const res = await Login(email, password);
-    if (res.status === true) {
-      Cookies.set(
-        "token",
-        res.data.token,
-        {
-          expires: 1,
-          secure: true,
-          sameSite: "strict",
-        },
-      );
+  const handleDaftar = async () => {
 
-      setTimeout(() => {
-        console.log("get Notes");
-        handleGetNotes();
-      }, 1000);
+    if (password !== confirmPassword) {
+      setMsg("Password tidak sama");
+      return;
+    }
 
+    const res: any = await Daftar(username, email, password);
+    console.log(res);
+    if (res?.data?.status === true) {
       setOpen(false);
-      setIsLogin(true);
     } else {
-      setMsg("Login Failed");
+      console.log(res);
+      setMsg(res.response.data.message);
     }
   };
 
@@ -75,6 +67,20 @@ export default function LoginModal() {
               <form action="">
                 <div>
                   <label className="text-sm text-slate-200" htmlFor="email">
+                    username
+                    <input
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="input mt-2"
+                      type="email"
+                      name="email"
+                      id="email"
+                      placeholder="Masukkan email..."
+                    />
+                  </label>
+
+                </div>
+                <div>
+                  <label className="text-sm text-slate-200" htmlFor="email">
                     Email
                     <input
                       onChange={(e) => setEmail(e.target.value)}
@@ -100,6 +106,19 @@ export default function LoginModal() {
                     />
                   </label>
                 </div>
+                <div className="mt-2">
+                  <label className="text-sm text-slate-200" htmlFor="password">
+                    Confirm Password
+                    <input
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="input mt-2"
+                      type="password"
+                      name="password"
+                      id="password"
+                      placeholder="Masukkan password..."
+                    />
+                  </label>
+                </div>
               </form>
             </div>
           </div>
@@ -108,9 +127,9 @@ export default function LoginModal() {
             <button
               type="button"
               className="button"
-              onClick={handelSubmitLogin}
+              onClick={handleDaftar}
             >
-              Login
+              Daftar
             </button>
           </div>
         </div>
