@@ -7,8 +7,11 @@ import { useState } from "react";
 import { isLoginState, loginModalState, notesState } from "../../../atoms/LoginAtom";
 import { Login } from "../../../services/Auth";
 import { getNotes } from "../../../services/Notes";
+import { useSnackbar, VariantType } from "notistack";
+import { Button } from "@mui/material";
 
 export default function LoginModal() {
+  const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useRecoilState(loginModalState);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   const [notes, setNotes] = useRecoilState(notesState);
@@ -17,6 +20,16 @@ export default function LoginModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
+
+  const handleClickVariant = (variant: VariantType) => {
+    // variant could be success, error, warning, info, or default
+    enqueueSnackbar('Login Success!', {
+      variant, anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      }
+    });
+  };
 
   const handleGetNotes = async () => {
     const res = await getNotes();
@@ -27,6 +40,7 @@ export default function LoginModal() {
   const handelSubmitLogin = async () => {
     const res = await Login(email, password);
     if (res.status === true) {
+      handleClickVariant("success");
       Cookies.set(
         "token",
         res.data.token,

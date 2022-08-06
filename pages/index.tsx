@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { isLoginState, notesState } from "../atoms/LoginAtom";
 import CardNotes from "../components/molecules/Card/CardNote";
 import FormAddNote from "../components/molecules/Form/FormAddNote";
@@ -10,10 +10,8 @@ import { getNotes } from "../services/Notes";
 
 
 function Home() {
-  // const notes: any = useRecoilValue(notesState);
   const [notes, setNotes]: any = useRecoilState(notesState);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
-
 
   const handleGetNotes = async () => {
     const res = await getNotes();
@@ -24,6 +22,8 @@ function Home() {
   useEffect(() => {
     handleGetNotes();
   }, [isLogin]);
+
+
 
   return (
     <div>
@@ -86,6 +86,8 @@ function Home() {
           </div>
 
         </main>
+
+
       </div>
     </div>
   );

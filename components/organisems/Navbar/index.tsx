@@ -2,6 +2,7 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
 import Cookies from "js-cookie";
+import { useSnackbar, VariantType } from "notistack";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { daftarModalState, loginModalState } from "../../../atoms/LoginAtom";
@@ -9,9 +10,21 @@ import DaftarModal from "../../molecules/Modal/DaftarModal";
 import LoginModal from "../../molecules/Modal/LoginModal";
 
 export default function Navbar() {
+  const { enqueueSnackbar } = useSnackbar();
   const [isOpen, setIsOpen] = useRecoilState(loginModalState);
   const [isOpenDaftar, setIsOpenDaftar] = useRecoilState(daftarModalState);
   const [isLogin, setIsLogin] = useState(false);
+
+  const handleClickVariant = (messange: string, variant: VariantType) => {
+    // variant could be success, error, warning, info, or default
+    enqueueSnackbar(messange, {
+      variant, anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      }
+    });
+  };
+
   const handleOpen = () => {
     setIsOpen(true);
   };
@@ -33,6 +46,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     Cookies.remove("token");
+    handleClickVariant("Logout success !", "success");
     setIsLogin(false);
   };
 

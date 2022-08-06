@@ -1,12 +1,13 @@
-import { title } from "process";
-import { FormEvent, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useSnackbar, VariantType } from "notistack";
+import { FormEvent } from "react";
+import { useRecoilState } from "recoil";
 import {
   isUpdateState, notesState, noteState,
 } from "../../../atoms/LoginAtom";
 import { getNotes, saveNote, updateNote } from "../../../services/Notes";
 
 export default function FormAddNote() {
+  const { enqueueSnackbar } = useSnackbar();
   const [isUpdate, setIsUpdate] = useRecoilState(isUpdateState);
   const [notes, setNotes] = useRecoilState(notesState);
   const [note, setNote] = useRecoilState(noteState);
@@ -17,15 +18,27 @@ export default function FormAddNote() {
     setNotes(res.data);
   };
 
+  const handleClickVariant = (messange: string, variant: VariantType) => {
+    // variant could be success, error, warning, info, or default
+    enqueueSnackbar(messange, {
+      variant, anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      }
+    });
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (note.title.length > 0 && note.body.length > 0) {
 
       if (isUpdate) {
         const res = await updateNote(parseInt(note.id), note.title, note.body, note.desc);
+        handleClickVariant("Note Updated !", "success");
         console.log(res);
       } else {
         const res = await saveNote(note.title, note.body, note.desc);
+        handleClickVariant("Note Seved !", "success");
         console.log(res);
       }
 

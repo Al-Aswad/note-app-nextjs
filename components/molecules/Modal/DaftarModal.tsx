@@ -1,12 +1,13 @@
-import Cookies from "js-cookie";
 import Modal from "@mui/material/Modal";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
 import { daftarModalState, isLoginState, notesState } from "../../../atoms/LoginAtom";
-import { Daftar, Login } from "../../../services/Auth";
+import { Daftar } from "../../../services/Auth";
 import { getNotes } from "../../../services/Notes";
+import { useSnackbar, VariantType } from "notistack";
 
 export default function DaftarModal() {
+  const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useRecoilState(daftarModalState);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   const [notes, setNotes] = useRecoilState(notesState);
@@ -24,6 +25,16 @@ export default function DaftarModal() {
     setNotes(res.data);
   };
 
+  const handleClickVariant = (variant: VariantType) => {
+    // variant could be success, error, warning, info, or default
+    enqueueSnackbar('Registrasi Success!', {
+      variant, anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      }
+    });
+  };
+
   const handleDaftar = async () => {
 
     if (password !== confirmPassword) {
@@ -34,6 +45,7 @@ export default function DaftarModal() {
     const res: any = await Daftar(username, email, password);
     console.log(res);
     if (res?.data?.status === true) {
+      handleClickVariant("success");
       setOpen(false);
     } else {
       console.log(res);
@@ -67,7 +79,7 @@ export default function DaftarModal() {
               <form action="">
                 <div>
                   <label className="text-sm text-slate-200" htmlFor="email">
-                    username
+                    Username
                     <input
                       onChange={(e) => setUsername(e.target.value)}
                       className="input mt-2"
@@ -79,7 +91,7 @@ export default function DaftarModal() {
                   </label>
 
                 </div>
-                <div>
+                <div className="mt-2">
                   <label className="text-sm text-slate-200" htmlFor="email">
                     Email
                     <input

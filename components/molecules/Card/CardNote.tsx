@@ -1,4 +1,5 @@
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useSnackbar, VariantType } from "notistack";
+import { useRecoilState } from "recoil";
 import { isUpdateState, notesState, noteState } from "../../../atoms/LoginAtom";
 import { archiveNote, deleteNote, getNotes } from "../../../services/Notes";
 
@@ -8,6 +9,7 @@ interface noteProps {
 }
 
 export default function CardNotes({ note }: any) {
+  const { enqueueSnackbar } = useSnackbar();
   const [isUpdate, setIsUpdate] = useRecoilState(isUpdateState);
   const [notes, setNotes] = useRecoilState(notesState);
   const [noteS, setNoteS] = useRecoilState(noteState);
@@ -24,6 +26,16 @@ export default function CardNotes({ note }: any) {
     setNotes(res.data);
   };
 
+  const handleClickVariant = (messange: string, variant: VariantType) => {
+    // variant could be success, error, warning, info, or default
+    enqueueSnackbar(messange, {
+      variant, anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      }
+    });
+  };
+
   const handleEdit = () => {
     setIsUpdate(true);
     setNoteS({ ...note, id: id, title: title, body: body, desc: desc });
@@ -31,6 +43,7 @@ export default function CardNotes({ note }: any) {
 
   const handleDelete = async (id: number) => {
     const res = await deleteNote(id);
+    handleClickVariant("Delete Note !", "success");
 
     console.log("Delete Note ", res);
     handleGetNotes();
@@ -39,6 +52,11 @@ export default function CardNotes({ note }: any) {
   const handleArchive = async (id: number) => {
     console.log("Archive Note Status ", !note.is_archive);
     const res = await archiveNote(id, !note.is_archive);
+    if (!note.is_archive) {
+      handleClickVariant("Archive Note !", "success");
+    } else {
+      handleClickVariant("Unarchive Note !", "success");
+    }
     // console.log("Archive Note ", res);
     handleGetNotes();
   }
