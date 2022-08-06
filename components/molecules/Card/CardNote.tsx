@@ -2,6 +2,11 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { isUpdateState, notesState, noteState } from "../../../atoms/LoginAtom";
 import { archiveNote, deleteNote, getNotes } from "../../../services/Notes";
 
+interface noteProps {
+  note: any;
+  is_archive: boolean;
+}
+
 export default function CardNotes({ note }: any) {
   const [isUpdate, setIsUpdate] = useRecoilState(isUpdateState);
   const [notes, setNotes] = useRecoilState(notesState);
@@ -63,7 +68,9 @@ export default function CardNotes({ note }: any) {
           onClick={() => handleArchive(parseInt(id))}
           type="button"
           className="text-green-700 hover:bg-green-500 hover:text-white rounded-md w-full">
-          Done
+          {
+            note.is_archive ? "Unarchive" : "Archive"
+          }
         </button>
       </div>
     </div>

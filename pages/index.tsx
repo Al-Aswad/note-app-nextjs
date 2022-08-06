@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { isLoginState, notesState } from "../atoms/LoginAtom";
 import CardNotes from "../components/molecules/Card/CardNote";
 import FormAddNote from "../components/molecules/Form/FormAddNote";
@@ -8,9 +8,12 @@ import Header from "../components/organisems/Header";
 import { getNotes } from "../services/Notes";
 
 
+
 function Home() {
-  const [notes, setNotes] = useRecoilState(notesState);
+  // const notes: any = useRecoilValue(notesState);
+  const [notes, setNotes]: any = useRecoilState(notesState);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+
 
   const handleGetNotes = async () => {
     const res = await getNotes();
@@ -44,7 +47,7 @@ function Home() {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 justify-start gap-4 w-full ">
               {
-                notes.filter(note => !note.is_archive).map((note) => (
+                notes.filter((note: any) => (!note.is_archive)).map((note: any) => (
                   <CardNotes key={note.id} note={note} />
                 ))
               }
@@ -52,7 +55,7 @@ function Home() {
             </div>
 
             {
-              notes.filter(note => !note.is_archive).length === 0 && (
+              notes.filter((note: any) => !note.is_archive).length === 0 && (
                 <div className="w-full flex justify-center">
                   <p>Tidak ada Catatan</p>
                 </div>
@@ -68,13 +71,13 @@ function Home() {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 justify-start gap-4 w-full ">
               {
-                notes.filter(note => note.is_archive).map((note) => (
+                notes.filter((note: any) => note.is_archive).map((note: any) => (
                   <CardNotes key={note.id} note={note} />
                 ))
               }
             </div>
             {
-              notes.filter(note => note.is_archive).length === 0 && (
+              notes.filter((note: any) => note.is_archive).length === 0 && (
                 <div className="w-full flex justify-center">
                   <p>Tidak ada Catatan</p>
                 </div>
